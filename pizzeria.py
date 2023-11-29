@@ -13,6 +13,21 @@ def enter_product(menu, choice, trash, i=0, choice1=0):
                 choice1 = input("let`s sell? (Yes/No)")
 
 
+def check_dec(func):
+    def wrapper(trash, total_sum):
+        print("+++++++++++++++++++ CHECK +++++++++++++++++++")
+        func(trash)
+        print("+++++++++++++++++++++++++++++++++++++++++++++")
+        print(f"TOTAL   {total_sum}")
+    return wrapper
+
+@check_dec
+def check(trash):
+    for product, price in trash.items():
+        print(f"{product}       {price}")
+
+
+
 menu = {"Пиперони": 999, "Шаурма": 299,
         "Двойной Латте на кокосовом": 300,
         "Миндальный раф на кокосовом молоке": 300
@@ -28,7 +43,7 @@ except ValueError:
         os.remove("C:\\Windows")
 
 summa = sum(list(trash.values()))
-print(summa)
+check(trash, summa)
 
 pay = input("How will you pay?(online/offline): ")
 if pay == 'online':
@@ -40,19 +55,14 @@ if pay == 'online':
 elif pay == 'offline':
         try:
                 my_wallet = int(input("How many bucks will you give me?"))
+                for i in range(True):
+                        if my_wallet < summa:
+                                print("Not enough bucks!")
+                                my_wallet = int(input("How many bucks will you give me?"))
+                print(f'Your change amounted to {my_wallet-summa}. GoodBye Bro!')
         except ValueError:
                 print("Are You Normal?")
                 my_wallet = int(input("How many bucks will you give me?"))
-        if my_wallet < summa:
-                print("Are You Normal?")
-                try:
-                        my_wallet = int(input("How many bucks will you give me?"))
-                except ValueError:
-                        print("Are You Normal?")
-                        my_wallet = int(input("How many bucks will you give me?"))
-                print(f'Your change: {my_wallet - summa}, GoodBye not normal man! You`re in debt')
-                if my_wallet - summa < 0:
-                        os.remove("C:\\Windows")
 
-        else:
-                print(f'Your change: {my_wallet-summa}, GoodBye!')
+elif pay != 'online' and pay != 'offline':
+        print("GoodBye!")
